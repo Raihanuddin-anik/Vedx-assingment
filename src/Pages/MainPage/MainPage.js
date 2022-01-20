@@ -2,14 +2,22 @@ import React, { useEffect, useState } from 'react';
 import Orders from '../../Components/Orders/Orders';
 import './MainPage.css'
 const MainPage = () => {
-    const [Data, setData] = useState([])
+    const [Data, setData] = useState([]);
+    console.log(Data)
     const [searchData, setSearchData] = useState('');
-    console.log(searchData)
+    const [filterStatus, setFilterStatus] = useState('');
+    console.log(filterStatus)
+   
     useEffect(() => {
         fetch('https://my-json-server.typicode.com/Ved-X/assignment/orders')
             .then(response => response.json())
             .then(json => setData(json))
-    })
+    },[Data])
+  useEffect(()=>{
+    const filteredData = Data.filter(value => value.status == filterStatus );
+    setData(filteredData)
+  },[filterStatus])
+  
 
 
     return (
@@ -21,7 +29,9 @@ const MainPage = () => {
                 <div className="dropdown">
                     <button onclick="myFunction()" className="dropbtn">Dropdown</button>
                     <div id="myDropdown" className="dropdown-content">
-                        <p>Raihan</p>
+                        <p onClick={() => setFilterStatus('Delivered')}>Delivered</p>
+                        <p onClick={() => setFilterStatus('Completed')}>Completed</p>
+                        <p onClick={() => setFilterStatus('Prepared')}>Prepared</p>
                     </div>
                 </div>
             </div>
@@ -43,7 +53,7 @@ const MainPage = () => {
                         else if (value.customer.toLowerCase().includes(searchData.toLocaleLowerCase())) {
                             return value
                         }
-                    }).map((data) => <Orders data={data} />)}
+                    }).map((data) => <Orders data={data} key={data.order_id} />)}
                 </table>
             </div>
         </div>
