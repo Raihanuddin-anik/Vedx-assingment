@@ -1,0 +1,19 @@
+
+.Table_Reader_Row{
+    background-Color:#f5f6fa;
+    height: 50px;
+    text-align: left;
+}
+.Table_Header{
+    height: 50px;
+    text-align: left;
+    width: 250px;
+}
+.Table_Header_Id{
+    height: 50px;
+    text-align: center;
+    width: 300px;
+}
+table {
+    border-collapse: collapse;
+}

@@ -1,0 +1,14 @@
+
+
+.Table_Data{
+    background-Color:#ffffff;
+    height: 50px;
+    width: 10%;
+    text-align: left;
+}
+.Table_Data_Id{
+    height: 50px;
+    background-Color:#ffffff;
+    width: 10%;
+    text-align: center;
+}
