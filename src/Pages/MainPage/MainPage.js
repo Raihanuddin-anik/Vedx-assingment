@@ -1,52 +1,66 @@
 import React, { useEffect, useState } from 'react';
 import Orders from '../../Components/Orders/Orders';
+import { BiFilter } from 'react-icons/bi';
+import { AiFillCaretDown } from 'react-icons/ai';
+
 import './MainPage.css'
 const MainPage = () => {
     const [Data, setData] = useState([]);
     console.log(Data)
     const [searchData, setSearchData] = useState('');
-    const [filterStatus, setFilterStatus] = useState('');
-    console.log(filterStatus)
-   
+    const [FilterData, setFilterData] = useState([]);
+  
     useEffect(() => {
         fetch('https://my-json-server.typicode.com/Ved-X/assignment/orders')
             .then(response => response.json())
-            .then(json => setData(json))
-    },[Data])
-  useEffect(()=>{
-    const filteredData = Data.filter(value => value.status == filterStatus );
-    setData(filteredData)
-  },[filterStatus])
-  
+            .then(json => {
+                setData(json)
+                setFilterData(json)
+            })
+    }, [])
+
+    const filterByStatus = (e) => {
+      if(e.target.value){
+        const filteredData = Data.filter(value => value.status === e.target.value);
+        setFilterData(filteredData)
+      }
+      else setFilterData(Data)
+    }
+
 
 
     return (
-        <div>
-            <div className="navbar">
+        <div className='container-fluid'>
+            <section className='Top_Header'>
+                <div style={{color:"#00B4CC"}}>All Orders{Data.length}</div>
+                <div style={{color:"darkgrey"}}>showing {FilterData.length} out of {Data.length} </div>
+            </section>
+            <section className="navbar">
                 <div className='Input'>
-                    <input type="text" onChange={(event) => setSearchData(event.target.value)} placeholder="Search.." />
+                    <input type="text" className='Input_Item' onChange={(event) => setSearchData(event.target.value)} placeholder="Search.." />
                 </div>
                 <div className="dropdown">
-                    <button onclick="myFunction()" className="dropbtn">Dropdown</button>
-                    <div id="myDropdown" className="dropdown-content">
-                        <p onClick={() => setFilterStatus('Delivered')}>Delivered</p>
-                        <p onClick={() => setFilterStatus('Completed')}>Completed</p>
-                        <p onClick={() => setFilterStatus('Prepared')}>Prepared</p>
+                    <button onclick="myFunction()" className="dropbtn"><BiFilter/> Filter</button>
+                    <div className="dropdown-content">
+                        <button  className="Each_dropdown" value="Delivered" onClick={(e) => filterByStatus(e)}>Delivered</button>
+                        <button  className="Each_dropdown" value="Completed" onClick={(e) => filterByStatus(e)}>Completed</button>
+                        <button  className="Each_dropdown" value="Prepared" onClick={(e) => filterByStatus(e)}>Prepared</button>
+                        <button  className="Each_dropdown"  onClick={(e) => filterByStatus(e)}>All</button>
                     </div>
                 </div>
-            </div>
-            <div className="container-fluid">
+            </section>
+            <section  style={{overflowX:"auto"}}>
                 <table>
                     <tr className='Table_Reader_Row'>
-                        <th className="Table_Header_Id" >ORDER ID</th>
-                        <th className="Table_Header">CUSTOMER</th>
-                        <th className="Table_Header">ADDRESS</th>
-                        <th className="Table_Header">PRODUCT</th>
-                        <th className="Table_Header">Date Order</th>
-                        <th className="Table_Header">STATUS</th>
+                        <th className="Table_Header_Id" >ORDER ID <AiFillCaretDown className="Arrow_ICon"/></th>
+                        <th className="Table_Header">CUSTOMER <AiFillCaretDown className="Arrow_ICon"/></th>
+                        <th className="Table_Header">ADDRESS <AiFillCaretDown className="Arrow_ICon"/></th>
+                        <th className="Table_Header">PRODUCT <AiFillCaretDown className="Arrow_ICon"/></th>
+                        <th className="Table_Header">Date Order <AiFillCaretDown className="Arrow_ICon"/></th>
+                        <th className="Table_Header">STATUS <AiFillCaretDown className="Arrow_ICon"/></th>
 
                     </tr>
-                    {Data.filter((value) => {
+                    {FilterData.filter((value) => {
                         if (searchData === '') {
                             return value
                         }
@@ -55,7 +69,7 @@ const MainPage = () => {
                         }
                     }).map((data) => <Orders data={data} key={data.order_id} />)}
                 </table>
-            </div>
+            </section>
         </div>
     );
 };
